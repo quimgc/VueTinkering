@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+
+
+</head>
+<body>
+
+<div id="root">
+    <!--vista-->
+    <input type="text" id="message" v-model="message">
+
+    <p> The value of Input is: {{message}} </p>
+
+</div>
+
+
+
+<script src="https://unpkg.com/vue"></script>
+
+<script>
+    //objecte amb JavaScript
+   //Model
+    let data = {
+
+    message: 'Hello World'
+
+    };
+
+
+    //Controlador
+    //Controller o MV (Model View)
+    //vanilla JS significa JS "a pelo"
+    //CSS
+    //console.log(document.querySelector('#message'));
+    //document.querySelector('#message').value = data.message;
+
+    let vm = new Vue({
+
+        //se li ha de dir quina part de la pag. html sigui reactiva. (reaccioni quan se canvii algo al model.)
+
+        el: '#root',
+        data: {
+            message: 'Hello World'
+        }
+
+
+
+    })
+
+
+</script>
+
+</body>
+</html>

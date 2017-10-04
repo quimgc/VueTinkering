@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+    <!--CSS-->
+    <link  rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
+
+
+    <style>
+        li.completed {
+            text-decoration: line-through;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+
+<div id="root">
+
+    <ul>
+        <!--Es al reves que amb un foreach de php -->
+        <li v-for="task in tasks" v-bind:class="{completed : isCompleted(task) }" @dblclick="updateTask(task)">
+
+            <input type="text" v-if="editedTask==task" @keyup.enter="updateTask(null)">
+
+            <div v-else>
+
+            {{task.name}}
+
+            <i class="fa fa-pencil" aria-hidden="true" @click="updateTask(task)"></i>
+
+            <i class="fa fa-times" aria-hidden="true" @click="deleteTask(task)"></i>
+
+            </div>
+
+            <!--| {{task.completed}}-->
+        </li>
+    </ul>
+
+    Nova tasca a afegir: <input type="text" v-model="newTask" id="newTask" @keyup.enter="addTask">
+    <!--<button id="add" @click="addTask"> Afegir Tasca</button>-->
+</div>
+
+
+
+<script src="https://unpkg.com/vue"></script>
+
+<script>
+
+    let data = {
+
+        message: 'Hello World'
+    };
+
+    let vm = new Vue({
+
+        el: '#root',
+        data: {
+            editedTask: null,
+            newTask: '',
+            tasks: [
+                {
+                  name : 'comprar pa',
+                  completed : true
+                },
+                {
+                    name : 'Aprendre PHP',
+                    completed : true
+                },
+                {
+                    name : 'Prova',
+                    completed : false
+                }]
+
+        },
+        methods: {
+            addTask() {
+
+                this.tasks.push({name : this.newTask, completed : false});
+                this.newTask='';
+
+            },
+            isCompleted(task) {
+                return task.completed;
+            },
+            deleteTask(task){
+                this.tasks.splice(this.tasks.indexOf(task) ,1);
+
+            },
+            updateTask(task) {
+
+            this.editedTask = task;
+
+
+            }
+
+
+        }
+
+    })
+
+
+
+
+//
+//    document.querySelector('#add').addEventListener('click',function(){
+////        console.log('clic!!');
+//        let newTask = document.querySelector('#newTask').value;
+//        vm.tasks.push(newTask);
+//    })
+</script>
+
+
+</body>
+</html>
