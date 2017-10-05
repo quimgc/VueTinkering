@@ -29,9 +29,11 @@
 
     <ul>
         <!--Es al reves que amb un foreach de php -->
-        <li v-for="task in tasks" v-bind:class="{completed : isCompleted(task) }" @dblclick="updateTask(task)">
+        <li v-for="task in tasks" v-bind:class="{completed : isCompleted(task) }" @dblclick="editTask(task)">
 
-            <input type="text" v-if="editedTask==task" @keyup.enter="updateTask(null)">
+            <input type="text" v-if="editedTask==task" v-model="modifyTask" id="modifyTask"  @keyup.enter="updateTask(task)" @keyup.esc="cancelEdit(task)">
+
+            <!--@keyup.enter="updateTask(null)" >-->
 
             <div v-else>
 
@@ -67,6 +69,7 @@
         el: '#root',
         data: {
             editedTask: null,
+            modifyTask: '',
             newTask: '',
             tasks: [
                 {
@@ -97,12 +100,28 @@
                 this.tasks.splice(this.tasks.indexOf(task) ,1);
 
             },
-            updateTask(task) {
 
-            this.editedTask = task;
 
+            updateTask(task){
+                this.editedTask.name = this.modifyTask;
+
+            },
+
+            editTask(task) {
+                this.editedTask = task;
+                updateTask(task);
+//                modifyTask = '';
+//                this.editedTask = null;
+
+
+
+//                this.tasks.push({name : task.name, completed});
+
+            }, cancelEdit(task){
+                this.editedTask = null;
 
             }
+
 
 
         }
