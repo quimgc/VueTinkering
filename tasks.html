@@ -12,8 +12,14 @@
 
 
     <style>
+
+        [v-cloak] { display: none; }
         li.completed {
             text-decoration: line-through;
+        }
+
+        li.active {
+            background-color: #cdffe4;
         }
 
     </style>
@@ -25,7 +31,7 @@
 
 
 
-<div id="root">
+<div id="root" v-cloak>
 
     <ul>
         <!--Es al reves que amb un foreach de php -->
@@ -56,9 +62,15 @@
 
 <h2>Filtres</h2>
     <ul>
-        <li @click="show('all')">All</li>
-        <li @click="show('completed')">Completed</li>
-        <li @click="show('pending')">Pending</li>
+        <li @click="show('all')" :class="{active: this.filter =='all'}">All</li>
+        <li @click="show('completed')" :class="{active: this.filter =='completed'}">Completed</li>
+        <li @click="show('pending') " :class="{active: this.filter =='pending'}">Pending</li>
+    </ul>
+
+    <h2>Tasques pendents: </h2>
+
+    <ul>
+        {{this.pendingTaskCounter}}
     </ul>
 
 </div>
@@ -68,29 +80,28 @@
 <script src="https://unpkg.com/vue"></script>
 
 <script>
+    if (this.tasks != null){
 
-    var filters = {
-        all: function (tasks) {
-            return tasks
-        },
-        pending: function (tasks) {
-            return tasks.filter(function (task) {
-                return !task.completed
-            })
-        },
-        completed: function (tasks) {
-            return tasks.filter(function (task) {
-                return task.completed
-            })
+        var filters = {
+            all: function (tasks) {
+                return tasks
+            },
+            pending: function (tasks) {
+                return tasks.filter(function (task) {
+                    return !task.completed
+                })
+            },
+            completed: function (tasks) {
+                return tasks.filter(function (task) {
+                    return task.completed
+                })
+            }
         }
     }
 
 
 
-    let data = {
-
-        message: 'Hello World'
-    };
+    const LOCAL_STORAGE_KEY = "TASKS"
 
     let vm = new Vue({
 
@@ -101,28 +112,35 @@
             modifyTask: '',
             newTask: '',
             isUpdate : false,
-            tasks: [
-                {
-                    name : 'comprar pa',
-                    completed : true
-                },
-                {
-                    name : 'Aprendre PHP',
-                    completed : true
-                },
-                {
-                    name : 'Prova',
-                    completed : false
-                }]
+            tasks:''
 
         },
 
-        computed: {
-            filteredTasks: function () {
-                return filters[this.filter](this.tasks)
+        watch: {
+          tasks: function () {
 
+            localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(this.tasks))
 
             }
+        },
+
+
+
+        computed: {
+
+            filteredTasks: function () {
+                if(this.tasks != null) {
+
+                    return filters[this.filter](this.tasks)
+                }
+            },
+            pendingTaskCounter: function(){
+                if(this.tasks != null){
+                    return filters.pending(this.tasks).length
+
+                }
+            }
+
         },
 
         methods: {
@@ -156,8 +174,6 @@
             },
 
 
-
-
             editTask(task) {
                 console.log("editTask");
                 console.log(task.name);
@@ -186,6 +202,16 @@
                 this.editedTask = this.editedTask.name;
             }
 
+
+        },
+
+        mounted() {
+
+            this.tasks = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY) || '[]')
+            //this.tasks = localStorage.getItem()
+            //TODO obtenir les tasques de la localStorage.
+//            this.newTask = localStorage.setItem('NEW_TASK', 'Nova tasca')
+//            this.newTask = localStorage.getItem('NEW_TASK')
 
         }
 

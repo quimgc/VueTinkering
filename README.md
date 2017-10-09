@@ -29,3 +29,7 @@ Aquesta pàgina es va crear amb tots els llengüatges de JS:
 http://todomvc.com/ 
 
 
+##PARSE
+
+El Parse és el que passa d'objecte a JSON. Es realitza quan es llegeix de local a Storage. 
+
