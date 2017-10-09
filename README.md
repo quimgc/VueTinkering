@@ -27,3 +27,5 @@ https://chrome.google.com/webstore/detail/vuejs-devtools/nhdogjmejiglipccpnnnanh
 
 Aquesta pàgina es va crear amb tots els llengüatges de JS:
 http://todomvc.com/ 
+
+

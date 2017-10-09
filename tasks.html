@@ -29,16 +29,14 @@
 
     <ul>
         <!--Es al reves que amb un foreach de php -->
-        <li v-for="task in tasks" v-bind:class="{completed : isCompleted(task) }" @dblclick="editTask(task)">
+        <li v-for="task in filteredTasks" v-bind:class="{completed : isCompleted(task) }" @dblclick="editTask(task)">
 
-            <!--<input type="text" v-if="editedTask==task" v-model="modifyTask" id="modifyTask"  @keyup.enter="updateTask(task)" @keyup.esc="cancelEdit(task)">-->
             <input type="text"  v-if="editedTask==task"
                    v-model="modifyTask"
                    @keydown.enter="updateTask()"
                    @keyup.esc="cancelEdit()"
                    @keyup.enter="doneEdit()">
 
-            <!--@keyup.enter="updateTask(null)" >-->
 
             <div v-else>
 
@@ -50,12 +48,19 @@
 
             </div>
 
-            <!--| {{task.completed}}-->
         </li>
     </ul>
 
     Nova tasca a afegir: <input type="text" v-model="newTask" id="newTask" @keyup.enter="addTask">
     <!--<button id="add" @click="addTask"> Afegir Tasca</button>-->
+
+<h2>Filtres</h2>
+    <ul>
+        <li @click="show('all')">All</li>
+        <li @click="show('completed')">Completed</li>
+        <li @click="show('pending')">Pending</li>
+    </ul>
+
 </div>
 
 
@@ -63,6 +68,24 @@
 <script src="https://unpkg.com/vue"></script>
 
 <script>
+
+    var filters = {
+        all: function (tasks) {
+            return tasks
+        },
+        pending: function (tasks) {
+            return tasks.filter(function (task) {
+                return !task.completed
+            })
+        },
+        completed: function (tasks) {
+            return tasks.filter(function (task) {
+                return task.completed
+            })
+        }
+    }
+
+
 
     let data = {
 
@@ -74,6 +97,7 @@
         el: '#root',
         data: {
             editedTask: '',
+            filter: 'all',
             modifyTask: '',
             newTask: '',
             isUpdate : false,
@@ -92,7 +116,30 @@
                 }]
 
         },
+
+        computed: {
+            filteredTasks: function () {
+                return filters[this.filter](this.tasks)
+
+
+            }
+        },
+
         methods: {
+
+            show(filter){
+                this.filter = filter
+            },
+//
+//            showCompleted(){
+//                this.filter = 'completed'
+//
+//            },
+//            showPending(){
+//                this.filter = 'pending'
+//
+//            },
+
             addTask() {
 
                 this.tasks.push({name : this.newTask, completed : false});
@@ -125,8 +172,6 @@
                 console.log(this.editedTask.name);
                 this.editedTask.name = this.modifyTask;
 
-                //this.editedTask.name = this.modifyTask;
-
 
             },
 
@@ -146,15 +191,6 @@
 
     })
 
-
-
-
-    //
-    //    document.querySelector('#add').addEventListener('click',function(){
-    ////        console.log('clic!!');
-    //        let newTask = document.querySelector('#newTask').value;
-    //        vm.tasks.push(newTask);
-    //    })
 </script>
 
 
