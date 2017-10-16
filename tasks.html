@@ -58,7 +58,7 @@
     </ul>
 
     Nova tasca a afegir: <input type="text" v-model="newTask" id="newTask" @keyup.enter="addTask">
-    <!--<button id="add" @click="addTask"> Afegir Tasca</button>-->
+    <button id="add" @click="addTask"> Afegir Tasca</button>
 
 <h2>Filtres</h2>
     <ul>
@@ -80,13 +80,14 @@
 <script src="https://unpkg.com/vue"></script>
 
 <script>
-    if (this.tasks != null){
+
 
         var filters = {
             all: function (tasks) {
                 return tasks
             },
             pending: function (tasks) {
+
                 return tasks.filter(function (task) {
                     return !task.completed
                 })
@@ -97,7 +98,8 @@
                 })
             }
         }
-    }
+
+
 
 
 
@@ -112,7 +114,7 @@
             modifyTask: '',
             newTask: '',
             isUpdate : false,
-            tasks:''
+            tasks: []
 
         },
 
@@ -129,16 +131,12 @@
         computed: {
 
             filteredTasks: function () {
-                if(this.tasks != null) {
 
                     return filters[this.filter](this.tasks)
-                }
             },
             pendingTaskCounter: function(){
-                if(this.tasks != null){
                     return filters.pending(this.tasks).length
 
-                }
             }
 
         },
